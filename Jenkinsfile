@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'quay.io/ansible/toolset'
-      args '-v /var/run/docker.sock:/var/run/docker.sock'
+      args '-u 1000 -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
 

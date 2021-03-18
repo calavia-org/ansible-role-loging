@@ -5,4 +5,4 @@
   gather_facts: yes 
 
   roles:
-    - role: "ansible-role-loging"
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
