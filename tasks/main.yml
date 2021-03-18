@@ -1,0 +1,32 @@
+---
+# tasks file for ansible-role-loging
+- name: 'Install, configure and start rsyslog'
+  block:
+    - name: 'Install rsyslog'
+      ansible.builtin.package:
+        name: "{{ rsyslog_packages }}"
+        state: present
+      notify: rsyslog service
+
+    - name: 'Ensure "{{ rsyslog_log_path }}" is present'
+      ansible.builtin.file:
+        path: "{{ rsyslog_log_path }}"
+        owner: "{{ rsyslog_user }}"
+        group: "{{ rsyslog_group }}"
+        mode: "{{ rsyslog_log_path_mode }}" 
+        state: directory
+      notify: rsyslog service
+
+    - name: 'Configure rsyslog global parameters'
+      ansible.builtin.template:
+        src: 'rsyslog.conf.j2'
+        dest: "{{ rsyslog_global_config_file }}"
+        mode: "{{ rsyslog_config_files_mode }}"
+      notify: rsyslog service
+    
+    - name: 'Configure rsyslog facilities'
+      ansible.builtin.template:
+        src: 'facility.conf.j2'
+        dest: "{{ rsyslog_facilities_config_file }}"
+        mode: "{{ rsyslog_config_files_mode }}"
+      notify: rsyslog service

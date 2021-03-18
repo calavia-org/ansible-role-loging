@@ -1,0 +1,204 @@
+---
+# defaults file for ansible-role-loging
+
+rsyslog_packages:
+  - rsyslog
+  - rsyslog-mysql
+  - python3-pymysql
+
+rsyslog_user: 'syslog'
+rsyslog_group: 'syslog'
+
+rsyslog_service: 'rsyslog'
+rsyslog_log_path: '/var/log/rsyslog'
+rsyslog_log_path_mode: '0640'
+
+rsyslog_global_config_file: '/etc/rsyslog.conf'
+rsyslog_facilities_config_file: '/etc/rsyslog.d/50-default.conf'
+rsyslog_config_files_mode: '0640'
+
+rsyslog_receiver_tcp: yes
+rsyslog_allowed_sender: '*.example.net'
+
+rsyslog_remote_tcp:
+  enabled: yes
+  target: 'rsyslog.example.net'
+  port: 514
+  
+rsyslog_remote_mysql:
+  enabled: yes
+  template: 'StdSQLFormat'
+  server: 'mysql.example.net'
+  db: 'rsyslog'
+  uid: 'rsyslog'
+  pwd: 'rsyslog'
+
+# https://wiki.gentoo.org/wiki/Rsyslog
+rsyslog_facilities:
+  - id: 0
+    name: 'kern'
+    description: 'kernel messages'
+    local_severities: "{{ _rsyslog_facilities['kern'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['kern'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['kern'].mysql_severities | default([]) }}"
+
+  - id: 1
+    name: 'user'
+    description: 'user-level messages'
+    local_severities: "{{ _rsyslog_facilities['user'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['user'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['user'].mysql_severities | default([]) }}"
+
+  - id: 2
+    name: 'mail'
+    description: 'mail system'
+    local_severities: "{{ _rsyslog_facilities['mail'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['mail'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['mail'].mysql_severities | default([]) }}"
+
+  - id: 3
+    name: 'daemon'
+    description: 'system daemons'
+    local_severities: "{{ _rsyslog_facilities['daemon'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['daemon'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['daemon'].mysql_severities | default([]) }}"
+
+  - id: 4
+    name: 'auth'
+    description: 'authpriv/authorization messages'
+    local_severities: "{{ _rsyslog_facilities['auth'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['auth'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['auth'].mysql_severities | default([]) }}"
+
+  - id: 5
+    name: 'syslog'
+    description: 'messages generated internally by syslogd'
+    local_severities: "{{ _rsyslog_facilities['syslog'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['syslog'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['syslog'].mysql_severities | default([]) }}"
+
+  - id: 6
+    name: 'lpr'
+    description: 'line printer subsystem'
+    local_severities: "{{ _rsyslog_facilities['lpr'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['lpr'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['lpr'].mysql_severities | default([]) }}"
+
+  - id: 7
+    name: 'news'
+    description: 'network news subsystem'
+    local_severities: "{{ _rsyslog_facilities['news'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['news'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['news'].mysql_severities | default([]) }}"
+
+  - id: 8
+    name: 'uucp'
+    description: 'UUCP subsystem'
+    local_severities: "{{ _rsyslog_facilities['uucp'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['uucp'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['uucp'].mysql_severities | default([]) }}"
+
+  - id: 9
+    name: 'cron'
+    description: 'clock daemon'
+    local_severities: "{{ _rsyslog_facilities['cron'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['cron'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['cron'].mysql_severities | default([]) }}"
+
+  - id: 10
+    name: 'authpriv'
+    description: 'security/authorization messages'
+    local_severities: "{{ _rsyslog_facilities['authpriv'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['authpriv'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['authpriv'].mysql_severities | default([]) }}"
+
+  - id: 11
+    name: 'ftp'
+    description: 'FTP daemon'
+    local_severities: "{{ _rsyslog_facilities['ftp'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['ftp'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['ftp'].mysql_severities | default([]) }}"
+
+  - id: 12
+    name: 'ntp'
+    description: 'NTP subsystem'
+    local_severities: "{{ _rsyslog_facilities['ntp'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['ntp'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['ntp'].mysql_severities | default([]) }}"
+
+  - id: 13
+    name: 'logaudit'
+    description: 'log audit'
+    local_severities: "{{ _rsyslog_facilities['logaudit'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['logaudit'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['logaudit'].mysql_severities | default([]) }}"
+
+  - id: 14
+    name: 'logalert'
+    description: 'log alert'
+    local_severities: "{{ _rsyslog_facilities['logalert'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['logalert'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['logalert'].mysql_severities | default([]) }}"
+
+  - id: 15
+    name: 'clock'
+    description: 'clock daemon (note 2)'
+    local_severities: "{{ _rsyslog_facilities['clock'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['clock'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['clock'].mysql_severities | default([]) }}"
+
+  - id: 16
+    name: 'local0'
+    description: 'local use 0 (local0)'
+    local_severities: "{{ _rsyslog_facilities['local0'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local0'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local0'].mysql_severities | default([]) }}"
+
+  - id: 17
+    name: 'local1'
+    description: 'local use 1 (local1)'
+    local_severities: "{{ _rsyslog_facilities['local1'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local1'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local1'].mysql_severities | default([]) }}"
+
+  - id: 18
+    name: 'local2'
+    description: 'local use 2 (local2)'
+    local_severities: "{{ _rsyslog_facilities['local2'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local2'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local2'].mysql_severities | default([]) }}"
+
+  - id: 19
+    name: 'local3'
+    description: 'local use 3 (local3)'
+    local_severities: "{{ _rsyslog_facilities['local3'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local3'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local3'].mysql_severities | default([]) }}"
+
+  - id: 20
+    name: 'local4'
+    description: 'local use 4 (local4)'
+    local_severities: "{{ _rsyslog_facilities['local4'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local4'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local4'].mysql_severities | default([]) }}"
+
+  - id: 21
+    name: 'local5'
+    description: 'local use 5 (local5)'
+    local_severities: "{{ _rsyslog_facilities['local5'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local5'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local5'].mysql_severities | default([]) }}"
+
+  - id: 22
+    name: 'local6'
+    description: 'local use 6 (local6)'
+    local_severities: "{{ _rsyslog_facilities['local6'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local6'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local6'].mysql_severities | default([]) }}"
+
+  - id: 23
+    name: 'local7'
+    description: 'local use 7 (local7)'
+    local_severities: "{{ _rsyslog_facilities['local7'].local_severities | default([]) }}"
+    tcp_severities: "{{ _rsyslog_facilities['local7'].tcp_severities | default([]) }}"
+    mysql_severities: "{{ _rsyslog_facilities['local7'].mysql_severities | default([]) }}"

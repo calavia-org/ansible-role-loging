@@ -1,0 +1,13 @@
+---
+# handlers file for ansible-role-loging
+- name: rsyslog service
+  ansible.builtin.service:
+    name: "rsyslog"
+    enabled: yes
+    state: restarted
+
+- name: logrotate service
+  ansible.builtin.service:
+    name: "logrotate"
+    enabled: yes
+    state: restarted

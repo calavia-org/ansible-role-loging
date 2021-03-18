@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Jorge Calavia
+  namespace: calaviaorg
+  role_name: loging
+  description: Install and configura rsyslog and logrotate for rsyslog facilities 
+  license: Apache-2.0
+  company: Calavia Org
+  min_ansible_version: "2.10"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - focal
+  galaxy_tags:
+    - rsyslog
+    - logrotate
+
+dependencies: []
