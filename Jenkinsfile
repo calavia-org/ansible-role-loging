@@ -19,7 +19,28 @@ pipeline {
 
     stage ('Molecule test') {
       steps {
-        sh 'sudo molecule test --all'
+        sh 'molecule lint'
+      }
+      steps {
+        sh 'molecule destroy'
+      }
+      steps {
+        sh 'molecule create'
+      }
+      steps {
+        sh 'molecule prepare'
+      }
+      steps {
+        sh 'molecule converge'
+      }
+      steps {
+        sh 'molecule idempotence'
+      }
+      steps {
+        sh 'ANSIBLE_STDOUT_CALLBACK=junit JUNIT_OUTPUT_DIR="junit-results" JUNIT_FAIL_ON_CHANGE=true JUNIT_HIDE_TASK_ARGUMENTS=true molecule verify'
+      }
+      steps {
+        sh 'molecule destroy'
       }
     }
 
@@ -27,6 +48,7 @@ pipeline {
   post {
       always {
         junit '**/reports/junit/*.xml'
+        sh 'molecule destroy'
       }
    } 
 }   // close pipeline
