@@ -20,9 +20,10 @@ platforms:
     pre_build_image: yes
 provisioner:
   name: ansible
-#  config_options:
-#    defaults:
-#      stdout_callback: yaml
-#      bin_ansible_callbacks: yes
 verifier:
   name: ansible
+  env:
+    ANSIBLE_STDOUT_CALLBACK: junit 
+    JUNIT_OUTPUT_DIR: "molecule/default/reports/junit" 
+    JUNIT_FAIL_ON_CHANGE: true 
+    JUNIT_HIDE_TASK_ARGUMENTS: true

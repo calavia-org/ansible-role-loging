@@ -24,5 +24,10 @@ pipeline {
     }
 
   } // close stages
+  post {
+      always {
+        junit '**/reports/junit/*.xml'
+      }
+   } 
 }   // close pipeline
 
