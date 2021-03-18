@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'quay.io/ansible/toolset'
+      image 'robertdebock/github-action-molecule'
       args '-u 0 -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
