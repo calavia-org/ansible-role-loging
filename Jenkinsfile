@@ -11,8 +11,6 @@ pipeline {
     stage ('Display versions') {
       steps {
         sh '''
-          docker -v
-          python -V
           ansible --version
           molecule --version
         '''
