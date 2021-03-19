@@ -1,9 +1,8 @@
 ---
 # This is an example playbook to execute Ansible tests.
 
-- name: Verify
+- name: Software
   hosts: all
-  gather_facts: True 
   tasks:
     - name: 'Load variables file'
       include_vars: "{{ lookup('first_found', params) }}"
@@ -16,41 +15,68 @@
           paths:
             - '../../defaults'
 
-    - name: 'Test rsyslog installation and configuration'
-      block:
+    - block:
         - ansible.builtin.package:
             name: "{{ rsyslog_packages }}"
             state: present
           check_mode: True
           register: rsyslog_packages_status
 
+        - name: 'Test required packages are installed'
+          ansible.builtin.assert:
+            that:
+              - not rsyslog_packages_status.changed
+
+    - block:
         - ansible.builtin.stat:
             path: "{{ rsyslog_log_path }}"
           register: log_path 
 
-        - ansible.builtin.stat:
-            path: "{{ rsyslog_global_config_file }}"
-          register: global_config_file
-
-        - ansible.builtin.stat:
-            path: "{{ rsyslog_facilities_config_file }}"
-          register: facilities_config_file
-
-        - ansible.builtin.assert:
+        - name: 'Test required path for log files is present'
+          ansible.builtin.assert:
             that:
-              - not rsyslog_packages_status.changed
-
               - log_path.stat.exists
               - log_path.stat.isdir
               - log_path.stat.mode == "{{ rsyslog_log_path_mode }}"
               - log_path.stat.pw_name == "{{ rsyslog_user }}"
               - log_path.stat.gr_name == "{{ rsyslog_group}}"
 
+---
+- name: Configuration
+  hosts: all
+  tasks:
+    - name: 'Load variables file'
+      include_vars: "{{ lookup('first_found', params) }}"
+      vars:
+        params:
+          files:
+            - '{{ansible_distribution}}.yml'
+            - '{{ansible_os_family}}.yml'
+            - 'main.yml'
+          paths:
+            - '../../defaults'
+
+    - block:
+        - ansible.builtin.stat:
+            path: "{{ rsyslog_global_config_file }}"
+          register: global_config_file
+
+        - name: 'Test global file configuration'
+          ansible.builtin.assert:
+            that:
               - global_config_file.stat.exists
               - global_config_file.stat.isreg
               - global_config_file.stat.path == "{{ rsyslog_global_config_file }}"
               - global_config_file.stat.mode == "{{ rsyslog_config_files_mode }}"
 
+    - block:
+        - ansible.builtin.stat:
+            path: "{{ rsyslog_facilities_config_file }}"
+          register: facilities_config_file
+
+        - name: 'Test facilities file configuration'
+          ansible.builtin.assert:
+            that:
               - facilities_config_file.stat.exists
               - facilities_config_file.stat.isreg
               - facilities_config_file.stat.path == "{{ rsyslog_facilities_config_file }}"
