@@ -26,7 +26,8 @@
           ansible.builtin.assert:
             that:
               - not rsyslog_packages_status.changed
-
+            fail_msg: "{{ rsyslog_packages}} not installed"
+            success_msg: "Successful check of packages installation {{ rsyslog_packages }}"
     - block:
         - ansible.builtin.stat:
             path: "{{ rsyslog_log_path }}"
