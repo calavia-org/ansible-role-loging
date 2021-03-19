@@ -1,7 +1,7 @@
 ---
-# This is an example playbook to execute Ansible tests.
+# This playbook execute Ansible tests.
 
-- name: Software
+- name: Verify
   hosts: all
   tasks:
     - name: 'Load variables file'
@@ -40,21 +40,6 @@
               - log_path.stat.mode == "{{ rsyslog_log_path_mode }}"
               - log_path.stat.pw_name == "{{ rsyslog_user }}"
               - log_path.stat.gr_name == "{{ rsyslog_group}}"
-
----
-- name: Configuration
-  hosts: all
-  tasks:
-    - name: 'Load variables file'
-      include_vars: "{{ lookup('first_found', params) }}"
-      vars:
-        params:
-          files:
-            - '{{ansible_distribution}}.yml'
-            - '{{ansible_os_family}}.yml'
-            - 'main.yml'
-          paths:
-            - '../../defaults'
 
     - block:
         - ansible.builtin.stat:
